@@ -11,20 +11,31 @@ import { EvaluationAddComponent } from './entities/evaluation/evaluation-add/eva
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {RestaurantModule} from './entities/restaurant/restaurant.module';
 import {EvaluationModule} from './entities/evaluation/evaluation.module';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {HttpInterceptorBonus} from './shared/http.interceptor';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
+    NavbarComponent
   ],
   imports: [
     RestaurantModule,
     EvaluationModule,
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule,
+    FontAwesomeModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpInterceptorBonus,
+    multi: true
+  }],
+  bootstrap: [AppComponent],
+
 })
 export class AppModule { }

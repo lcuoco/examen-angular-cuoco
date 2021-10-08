@@ -1,1 +1,83 @@
-<p>restaurant-detail works!</p>
+<div class="row">
+  <div class="offset-3 col-6" *ngIf="restaurant">
+    <mat-card class="example-card card-restaurant" [ngClass]="this.getAvg(restaurant)<1 ? 'card-grey' : 'card-yellow'">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>{{restaurant.nom}}</mat-card-title>
+        <mat-card-subtitle class="card-sub">{{restaurant.adresse}}</mat-card-subtitle>
+      </mat-card-header>
+
+
+
+      <mat-card-content>
+        <mat-accordion *ngIf="restaurant.evaluations.length > 0">
+          <mat-expansion-panel hideToggle *ngIf="restaurant.evaluations.length > 0">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Voir les evaluations
+              </mat-panel-title>
+              <mat-panel-description>
+                Moyenne : {{this.getAvg(restaurant)}}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p *ngFor="let evaluation of this.restaurant.evaluations">{{evaluation.evaluateur}}
+              | {{evaluation.commentaire}} | <span *ngFor="let a of parseNumber(evaluation.etoiles)"><fa-icon
+                [icon]="faStar"></fa-icon></span></p>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <div *ngIf="restaurant.evaluations.length  === 0" class="text-center">
+          Aucune évaluations pour l'instant
+        </div>
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="evalForm">
+          <div>
+            <div class="form-group">
+              <label class="form-control-label">Evaluateur</label>
+              <input type="text" class="form-control" name="evaluateur" id="field_evaluateur" data-cy="evaluateur" formControlName="evaluateur" />
+              <div *ngIf="evalForm.get('evaluateur')!.invalid && (evalForm.get('evaluateur')!.dirty || evalForm.get('evaluateur')!.touched)">
+                <small class="form-text text-danger" *ngIf="evalForm.get('evaluateur')?.errors?.required">
+                  Champ requis
+                </small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-control-label">Commentaire</label>
+              <input type="text" class="form-control" name="commentaire" id="field_adresse" data-cy="commentaire" formControlName="commentaire" />
+              <div *ngIf="evalForm.get('commentaire')!.invalid && (evalForm.get('commentaire')!.dirty || evalForm.get('commentaire')!.touched)">
+                <small class="form-text text-danger" *ngIf="evalForm.get('commentaire')?.errors?.required">
+                  Champ requis
+                </small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-control-label">Etoiles</label>
+              <input type="number" class="form-control" name="etoiles" id="field_etoiles" data-cy="etoiles" formControlName="etoiles" />
+              <div *ngIf="evalForm.get('etoiles')!.invalid && (evalForm.get('etoiles')!.dirty || evalForm.get('etoiles')!.touched)">
+                <small class="form-text text-danger" *ngIf="evalForm.get('etoiles')?.errors?.required">
+                  Champ requis
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()"><span>Cancel</span>
+            </button>
+
+            <button
+              type="submit"
+              id="save-entity"
+              data-cy="entityCreateSaveButton"
+              [disabled]="evalForm.invalid"
+              class="btn btn-primary"
+            >&nbsp;<span>Save</span>
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button class="btn btn-outline-secondary" type="button" [routerLink]="['/add/', restaurant.id]">Modifier
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

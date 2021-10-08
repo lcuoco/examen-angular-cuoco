@@ -9,15 +9,16 @@ import {RestaurantDetailComponent} from './restaurants/restaurant-detail/restaur
 
 const routes: Routes = [
   { path: '', component: RestaurantsComponent },
+  { path: 'add/:restaurant', component: RestaurantAddComponent },
   { path: 'add', component: RestaurantAddComponent },
-  { path: 'detail', component: RestaurantDetailComponent },
+  { path: 'detail/:id', component: RestaurantDetailComponent },
 ];
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    [RouterModule.forRoot(routes)],
+    [RouterModule.forChild(routes)],
   ]
 })
 export class RestaurantRoutingModule { }
